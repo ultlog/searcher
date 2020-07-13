@@ -1,5 +1,6 @@
 package com.ultlog.searcher.log;
 
+import com.ultlog.common.model.Log;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LogReaderTest {
+public class LogTransformerTest {
 
     @Autowired
-    private LogReader logReader;
+    private LogTransformer logTransformer;
 
     @Test
     public void testLog() {
@@ -83,7 +84,9 @@ public class LogReaderTest {
                 "\tat com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:230)\n" +
                 "\tat com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:58)";
 
-        logReader.readLogFromString(log1);
+        final String[] split = log1.split("\n");
+
+        final Log log = logTransformer.readLogFromString(split);
     }
 
 }

@@ -1,9 +1,10 @@
 package com.ultlog.searcher.schedule;
 
+import com.ultlog.searcher.model.FileInfo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @program: collector
@@ -15,7 +16,17 @@ public class FileCheckScheduler {
 
     @Scheduled(cron = "*/20 * * * * ?")
     public void checkFile(){
-        System.out.println(LocalDateTime.now());
+
+        // todo check file add to fileInfos
+
+    }
+
+    private CopyOnWriteArrayList<FileInfo> fileInfos = new CopyOnWriteArrayList<>();
+
+
+    @Scheduled(cron = "*/5 * * * * ?")
+    public void readStringArrFromFile(){
+        // read file from fileInfos
 
     }
 }
