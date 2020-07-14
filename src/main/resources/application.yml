@@ -1,0 +1,13 @@
+ultlog:
+  searcher:
+    path: F:\Java\Workspace\ultlog\collector\logs
+    pattern: demo
+    max: 10
+    project: searcherTest
+    module: test
+    uuid: test
+    log:
+      # todo
+      sendType: ula
+  ula:
+    url:  http://localhost:8080/
