@@ -33,6 +33,9 @@ public class LogSender {
     @Value("${ultlog.ula.url}")
     private String ulaUrl;
 
+    @Value("${ultlog.searcher.log.level}")
+    private String level;
+
     @Autowired
     private LogTransformer logTransformer;
 
@@ -51,8 +54,33 @@ public class LogSender {
         log.setUuid(uuid);
         log.setModule(module);
         // send log
-        //sendLogToUla(log);
+        if (isAllowSend(log)) {
+            sendLogToUla(log);
+        }
 
+    }
+
+    private boolean isAllowSend(Log log){
+        final int levelValue = getLevelValue(log.getLevel());
+        return levelValue >= getLevelValue(level);
+    }
+
+    private int getLevelValue(String level) {
+        // TRACE > DEBUG > INFO > WARN > ERROR
+        switch (level) {
+            case "TRACE":
+                return 1;
+            case "DEBUG":
+                return 2;
+            case "INFO":
+                return 3;
+            case "WARN":
+                return 4;
+            case "ERROR":
+                return 5;
+            default:
+                return 0;
+        }
     }
 
     private void sendLogToUla(Log log) {

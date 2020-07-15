@@ -50,7 +50,7 @@ public class LogTransformer {
 
         final Match match = grok.match(logString[0]);
         final Map<String, Object> capture = match.capture();
-        final Object msg = capture.get("msg");
+
         Log log = new Log();
         log.setLevel(String.valueOf(capture.get("level")));
         // date to long
@@ -63,6 +63,8 @@ public class LogTransformer {
         }
 
         log.setMessage(String.valueOf(capture.get("msg")));
+
+        log.setLevel(String.valueOf(capture.get("value")).toUpperCase());
 
         StringBuilder stringBuilder = new StringBuilder();
 

@@ -9,5 +9,6 @@ ultlog:
     log:
       # todo
       sendType: ula
+      level: INFO
   ula:
     url:  http://localhost:8080/
