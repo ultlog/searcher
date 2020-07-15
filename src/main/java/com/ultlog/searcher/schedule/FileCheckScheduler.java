@@ -110,19 +110,29 @@ public class FileCheckScheduler {
             // read file from fileInfos
             try (final RandomAccessFile randomAccessFile = new RandomAccessFile(fileInfo.getFile(), "r")) {
 
+                // if file no change, return
+                if(fileInfo.getFileSize() >= randomAccessFile.length()){
+                    return;
+                }
+
                 // get change part
                 randomAccessFile.seek(fileInfo.getFileSize());
                 String tmp = "";
                 StringBuilder stringBuilder = new StringBuilder();
                 while ((tmp = randomAccessFile.readLine()) != null) {
+                    // just get today or yesterday log
                     if (stringBuilder.length() > 0 && StringUtils.isNoneBlank(tmp) && (tmp.startsWith(LocalDate.now().toString()) || tmp.startsWith(LocalDate.now().minusDays(1L).toString()))) {
                         // async send log to ula
                         logSender.SendLog(stringBuilder.toString());
-                        // todo check why miss log
                         stringBuilder.delete(0, stringBuilder.length());
                     }
+                    // iso to utf8
                     byte[] originalBytes = tmp.getBytes(StandardCharsets.ISO_8859_1);
                     stringBuilder.append(new String(originalBytes)).append("\n");
+                }
+                // when stream will be close,check is there string is not be send
+                if(stringBuilder.length() > 0){
+                    logSender.SendLog(stringBuilder.toString());
                 }
                 fileInfo.setFileSize(randomAccessFile.length());
 
