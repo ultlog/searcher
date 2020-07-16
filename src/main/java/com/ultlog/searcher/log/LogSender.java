@@ -47,14 +47,14 @@ public class LogSender {
 
 
     @Async
-    public void SendLog(String logString) {
+    public void sendLog(String logString) {
 
         final Log log = logTransformer.readLogFromString(logString);
-        log.setProject(project);
-        log.setUuid(uuid);
-        log.setModule(module);
         // send log
         if (isAllowSend(log)) {
+            log.setProject(project);
+            log.setUuid(uuid);
+            log.setModule(module);
             sendLogToUla(log);
         }
 
@@ -64,6 +64,7 @@ public class LogSender {
         final int levelValue = getLevelValue(log.getLevel());
         return levelValue >= getLevelValue(level);
     }
+
 
     private int getLevelValue(String level) {
         // TRACE > DEBUG > INFO > WARN > ERROR

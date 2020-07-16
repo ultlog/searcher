@@ -6,6 +6,8 @@ import io.krakens.grok.api.Grok;
 import io.krakens.grok.api.GrokCompiler;
 import io.krakens.grok.api.Match;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -23,6 +25,8 @@ public class LogTransformer {
 
     final private Grok grok;
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(LogTransformer.class);
+
     public LogTransformer() {
 
         GrokCompiler grokCompiler = GrokCompiler.newInstance();
@@ -34,14 +38,13 @@ public class LogTransformer {
         String msg = ".*";
         String stack = "[\\s\\S]*";
 
-
         grokCompiler.register("dateTime", dateTime);
         grokCompiler.register("thread", thread);
         grokCompiler.register("logger", logger);
         grokCompiler.register("level", level);
         grokCompiler.register("msg", msg);
         grokCompiler.register("stack", stack);
-        //grok = grokCompiler.compile("%{dateTime} %{thread}");
+
         grok = grokCompiler.compile("%{dateTime} \\[%{thread}] %{level} %{logger} - %{msg}%{stack}");
     }
 
@@ -81,21 +84,32 @@ public class LogTransformer {
         final Match match = grok.match(logString);
 
         final Map<String, Object> capture = match.capture();
+
+        final String msg = String.valueOf(capture.get("msg"));
+        final String level = String.valueOf(capture.get("level"));
+        final String stack = String.valueOf(capture.get("stack"));
+        final String dateTimeString = String.valueOf(capture.get("dateTime"));
+        if(StringUtils.isAnyBlank(msg,level,dateTimeString)){
+            return null;
+        }
+
         Log log = new Log();
-        log.setLevel(String.valueOf(capture.get("level")));
-        log.setStack(String.valueOf(capture.get("stack")));
+        log.setLevel(level);
+        log.setStack(String.valueOf(stack));
         if(StringUtils.isBlank(log.getStack())){
             log.setStack(null);
         }else{
-            log.setStack(log.getStack().replace("\n",";"));
+            // replace \n to,adapt ula
+            log.setStack(stack.replace("(\\r\\n|\\n|\\n\\r)",";"));
         }
+
         // date to long
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         try {
-            final long dateTime = sdf.parse(String.valueOf(capture.get("dateTime"))).getTime();
+            final long dateTime = sdf.parse(dateTimeString).getTime();
             log.setCreateTime(dateTime);
         } catch (ParseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         }
         log.setMessage(String.valueOf(capture.get("msg")));
 

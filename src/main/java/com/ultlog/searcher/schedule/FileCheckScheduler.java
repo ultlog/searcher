@@ -123,7 +123,7 @@ public class FileCheckScheduler {
                     // just get today or yesterday log
                     if (stringBuilder.length() > 0 && StringUtils.isNoneBlank(tmp) && (tmp.startsWith(LocalDate.now().toString()) || tmp.startsWith(LocalDate.now().minusDays(1L).toString()))) {
                         // async send log to ula
-                        logSender.SendLog(stringBuilder.toString());
+                        logSender.sendLog(stringBuilder.toString());
                         stringBuilder.delete(0, stringBuilder.length());
                     }
                     // iso to utf8
@@ -132,7 +132,7 @@ public class FileCheckScheduler {
                 }
                 // when stream will be close,check is there string is not be send
                 if(stringBuilder.length() > 0){
-                    logSender.SendLog(stringBuilder.toString());
+                    logSender.sendLog(stringBuilder.toString());
                 }
                 fileInfo.setFileSize(randomAccessFile.length());
 
