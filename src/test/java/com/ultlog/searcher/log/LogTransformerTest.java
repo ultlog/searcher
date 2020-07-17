@@ -83,20 +83,13 @@ public class LogTransformerTest {
             "at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:230)\n" +
             "at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:58)";
 
-    @Test
-    public void testLog() {
-
-        final String[] split = logString.split("\n");
-
-        final Log log = logTransformer.readLogFromString(split);
-        Assert.assertEquals(log.getLevel(),"ERROR");
-        Assert.assertEquals(log.getMessage(),"test error ");
-        Assert.assertEquals(log.getCreateTime(),(Long) 1593922967486L);
-    }
 
     @Test
     public void testReadLogFromString(){
         final Log log = logTransformer.readLogFromString(logString);
+        Assert.assertEquals(log.getLevel(),"ERROR");
+        Assert.assertEquals(log.getMessage(),"test error ");
+        Assert.assertEquals(log.getCreateTime(),(Long) 1593922967486L);
     }
 
 }
