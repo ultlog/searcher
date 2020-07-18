@@ -47,12 +47,6 @@ public class FileCheckScheduler {
     @Autowired
     private LogSender logSender;
 
-
-    @Scheduled(cron = "*/10 * * * * ?")
-    public void getPro(){
-        System.out.println("path="+path);
-    }
-
     @Scheduled(cron = "*/10 * * * * ?")
     public void checkFile() {
 

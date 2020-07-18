@@ -13,7 +13,7 @@ check_java_version() {
 
 argsError() {
   echo "Usage: startSearcher
-                        [ -p | -P | --path ]  log file path
+                        [ -p | --path ]  log file path
                         [ --pattern ]         log file pattern
                         [ --project ]         project
                         [ -m | --module ]     module
@@ -40,7 +40,7 @@ fi
 
 for arg in "$@"; do
   case $arg in
-  -p | --path | -P)
+  -p | --path)
     FILE_PATH="$2"
     shift
     ;;
@@ -80,14 +80,17 @@ for arg in "$@"; do
 done
 
 ## check args
-if [ "$FILE_PATH" == "UNSET" ] || [ "$PATTERN" == "UNSET" ] || [ "$MODULE" == "UNSET" ] || [ "$UUID" == "UNSET" ] || [ "$ULA" == "UNSET" ]; then
-  argsError
-fi
-
+#if [ "$FILE_PATH" == "UNSET" ] || [ "$PATTERN" == "UNSET" ] || [ "$MODULE" == "UNSET" ] || [ "$UUID" == "UNSET" ] || [ "$ULA" == "UNSET" ]; then
+#  argsError
+#fi
+#
+#if [ "$LEVEL" != "DEBUG" ] || [ "$LEVEL" != "INFO" ] || [ "$LEVEL" != "WARN" ] || [ "$LEVEL" != "ERROR" ]; then
+#  argsError
+#fi
 
 ## todo curl ULA check right
 ULA_URL=$ULA"/api/v1/log"
 
 args="-Dultlog.searcher.path=$FILE_PATH -Dultlog.searcher.pattern=$PATTERN -Dultlog.searcher.max=$MAX -Dultlog.searcher.project=$PROJECT -Dultlog.searcher.module=$MODULE -Dultlog.searcher.uuid=$UUID -Dultlog.searcher.log.sendType=ULA -Dultlog.searcher.log.LEVEL=$LEVEL -Dultlog.ula.url=$ULA_URL"
 
-nohup java -jar "$args" searcher.jar > searcherlog.log &
+nohup java -jar "$args" searcher.jar >searcherlog.log &
