@@ -10,10 +10,22 @@ searcher 是ultlog系统中收集日志的一个程序。通过对系统中日�
 searcher使用java编写，因此在应用searcher的操作系统上需要[jdk8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)以上的环境，若系统中没有以上环境则可以使用自带jdk的searcher包进行部署。
 
 
-建议将执行脚本下载到内网，通过minio，ftp或http服务挂载，并以此编写自动集成脚本，具体可见[自动集成实践](#实践)。
+建议将执行脚本下载到内网，通过minio，ftp或http服务挂载，并以此编写自动集成脚本，具体可见[自动集成实践](#自动集成实践)。
 
+如果有大量环境需要集成建议查看[自动集成实践](#自动集成实践)来快速编写自动集成脚本。
 
-如果有大量环境需要集成建议查看[自动集成实践](#实践)来快速编写自动集成脚本。
+### 程序配置
+将要应用searcher的程序的日志格式应如下：
+````
+%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%-5thread] %logger{20} - %msg%n</pattern>
+````
+如果非logback项目或非java项目应将日志格式调整为如此：
+````
+2020-07-21 09:16:37 [ERROR] [pool-420-thread-7] c.t.g.h.HttpConnectionPoolUtil - test error
+java.lang.RuntimeException: test error
+at com.example.demo.DemoApplicationTests.contextLoads(DemoApplicationTests.java:21)
+....
+````
 
 ### 选择软件包
 |  环境|   软件包 |
@@ -26,13 +38,15 @@ searcher使用java编写，因此在应用searcher的操作系统上需要[jdk8]
 
 
 #### docker linux
-- 进入docker镜像
-- 将下载好的软件包传入 可以在镜像内使用curl等命令进行下载
+- 使用exec等命令进入docker镜像
+- 将下载好的软件包传入（可以在镜像内使用curl等命令进行下载）
 - 解压文件
 - 执行 sh searcher.sh [{args}](#配置项说明)
 
 #### linux
-sh startSearcher.sh {args}
+- 将下载好的软件包传入 可以在镜像内使用curl等命令进行下载
+- 解压文件
+- 执行 sh searcher.sh [{args}](#配置项说明)
 #### windows
 修改{searcher path}/application.yml，正确填写其中配置项
 执行语句启动
@@ -44,13 +58,19 @@ java -jar searcher.jar
 {searcher_path}/java -jar searcher.jar
 ````
 
-#### 配置项说明
+### 自动集成实践
+
+### 配置项说明
 参数说明
-##### 使用配置文件
+#### 使用配置文件
+使用配置文件即为将软件包内部的配置文件进行修改，然后存放到需要集成searcher的系统某个地址下，通过参数指定路径即可
+
 |  参数|   说明 |是否必填| 默认值| 实例
 | ------ | ------ | ------ | ------ | ------ | 
 | -f , --file | 配置文件的路径 | √ | | /searcher/application.yml
-##### 直接传参
+#### 直接传参
+
+不使用配置文件直接通过以下参数启动searcher服务
 
 |  参数|   说明 |是否必填| 默认值| 实例 |
 | ------ | ------ | ------ | ------ | ------ | 
@@ -63,5 +83,3 @@ java -jar searcher.jar
 | --level | 收集日志的最低等级 | × | INFO | WARN| 
 | -u , --ula | ula服务地址 |√ | | http://192.168.2.2:8080/ | 
 
-
-# 实践
