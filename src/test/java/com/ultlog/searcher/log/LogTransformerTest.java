@@ -16,7 +16,7 @@ public class LogTransformerTest {
     @Autowired
     private LogTransformer logTransformer;
 
-    String logString = "2020-07-05 12:22:47.486 [main] ERROR com.example.demo.DemoApplicationTests - test error \n" +
+    String logString = "2020-07-21 09:16:37 [ERROR] [pool-420-thread-7] c.t.g.h.HttpConnectionPoolUtil - test error \n" +
             "java.lang.RuntimeException: tea das asdsawda asdas a\n" +
             "at com.example.demo.DemoApplicationTests.contextLoads(DemoApplicationTests.java:21)\n" +
             "at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n" +
@@ -26,14 +26,16 @@ public class LogTransformerTest {
             "at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:675)\n";
 
 
-    String pattern = "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n";
+    String pattern = " <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%-5thread] %logger{20} - %msg%n</pattern>";
+
 
     @Test
-    public void testReadLogFromString(){
-        final Log log = logTransformer.readLogFromString(logString);
-        Assert.assertEquals(log.getLevel(),"ERROR");
-        Assert.assertEquals(log.getMessage(),"test error ");
-        Assert.assertEquals(log.getCreateTime(),(Long) 1593922967486L);
+    public void testReadLogFromString() {
+        String d = "2020-07-21 09:16:37 [ERROR] [pool-420-thread-7] c.t.g.h.HttpConnectionPoolUtil - test error \n" +
+                "java.lang.RuntimeException: tea das asdsawda asdas a\n" +
+                "at com.example.demo.DemoApplicationTests.contextLoads(DemoApplicationTests.java:21)\n";
+        final Log log = logTransformer.readLogFromString(d);
+        Assert.assertEquals(log.getLevel(), "ERROR");
     }
 
 }

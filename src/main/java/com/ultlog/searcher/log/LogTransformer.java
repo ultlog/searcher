@@ -33,7 +33,7 @@ public class LogTransformer {
         String dateTime = "(?>\\d\\d){1,2}-(?:0?[1-9]|1[0-2])-(?:(?:0[1-9])|(?:[12][0-9])|(?:3[01])|[1-9])[ ](?:2[0123]|[01]?[0-9]):?(?:[0-5][0-9])(?::?(?:(?:[0-5]?[0-9]|60)(?:[:.,][0-9]+)?))?";
 
         String thread = ".*?";
-        String level = "([A|a]lert|ALERT|[T|t]race|TRACE|[D|d]ebug|DEBUG|[N|n]otice|NOTICE|[I|i]nfo|INFO|[W|w]arn?(?:ing)?|WARN?(?:ING)?|[E|e]rr?(?:or)?|ERR?(?:OR)?|[C|c]rit?(?:ical)?|CRIT?(?:ICAL)?|[F|f]atal|FATAL|[S|s]evere|SEVERE|EMERG(?:ENCY)?|[Ee]merg(?:ency)?)";
+        String level = "([A|a]lert|ALERT|[T|t]race|TRACE|[D|d]ebug|DEBUG|[N|n]otice|NOTICE|[I|i]nfo|INFO|INFO |[W|w]arn?(?:ing)?|WARN?(?:ING)?|[E|e]rr?(?:or)?|ERR?(?:OR)?|[C|c]rit?(?:ical)?|CRIT?(?:ICAL)?|[F|f]atal|FATAL|[S|s]evere|SEVERE|EMERG(?:ENCY)?|[Ee]merg(?:ency)?)";
         String logger = ".*?";
         String msg = ".*";
         String stack = "[\\s\\S]*";
@@ -45,7 +45,7 @@ public class LogTransformer {
         grokCompiler.register("msg", msg);
         grokCompiler.register("stack", stack);
 
-        grok = grokCompiler.compile("%{dateTime} \\[%{thread}] %{level} %{logger} - %{msg}%{stack}");
+        grok = grokCompiler.compile("%{dateTime} \\[%{level}] \\[%{thread}] %{logger} - %{msg}%{stack}");
     }
 
     public Log readLogFromString(String[] logString) {
@@ -94,17 +94,20 @@ public class LogTransformer {
         }
 
         Log log = new Log();
-        log.setLevel(level);
+        log.setLevel(level.trim());
         log.setStack(String.valueOf(stack));
         if(StringUtils.isBlank(log.getStack())){
             log.setStack(null);
         }else{
             // replace \n to,adapt ula
-            log.setStack(stack.replace("(\\r\\n|\\n|\\n\\r)",";"));
+            log.setStack(stack.replace("\r\n",";"));
+            log.setStack(stack.replace("\n\r",";"));
+            log.setStack(stack.replace("\n\n",";"));
+            log.setStack(stack.replace("\n",";"));
         }
 
         // date to long
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             final long dateTime = sdf.parse(dateTimeString).getTime();
             log.setCreateTime(dateTime);
