@@ -111,8 +111,11 @@ public class FileCheckScheduler {
             try (final RandomAccessFile randomAccessFile = new RandomAccessFile(fileInfo.getFile(), "r")) {
 
                 // if file no change, return
-                if(fileInfo.getFileSize() >= randomAccessFile.length()){
+                if(fileInfo.getFileSize() == randomAccessFile.length()){
                     return;
+                }else if(fileInfo.getFileSize() < randomAccessFile.length()){
+                    // if randomAccessFile length < fileInfo size  ,the log file is rewrote
+                    fileInfo.setFileSize(0L);
                 }
 
                 // get change part
