@@ -113,7 +113,7 @@ public class FileCheckScheduler {
                 // if file no change, return
                 if(fileInfo.getFileSize() == randomAccessFile.length()){
                     return;
-                }else if(fileInfo.getFileSize() < randomAccessFile.length()){
+                }else if(fileInfo.getFileSize() > randomAccessFile.length()){
                     // if randomAccessFile length < fileInfo size  ,the log file is rewrote
                     fileInfo.setFileSize(0L);
                 }
