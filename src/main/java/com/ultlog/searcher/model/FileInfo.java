@@ -16,4 +16,30 @@ public class FileInfo {
 
     private long lastReadTime;
 
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public FileInfo setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+        return this;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public FileInfo setFile(File file) {
+        this.file = file;
+        return this;
+    }
+
+    public long getLastReadTime() {
+        return lastReadTime;
+    }
+
+    public FileInfo setLastReadTime(long lastReadTime) {
+        this.lastReadTime = lastReadTime;
+        return this;
+    }
 }
