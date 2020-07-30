@@ -99,7 +99,7 @@ ENTRYPOINT ["sh","start.sh"]
 
 |  参数|   说明 |是否必填| 默认值| 实例
 | ------ | ------ | ------ | ------ | ------ | 
-| -f , --file | 配置文件的路径 | √ | | /searcher/application.yml
+| -f , --file | 配置文件的路径 | √ | | /searcher/
 
 
 #### 直接传参
