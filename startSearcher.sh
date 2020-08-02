@@ -89,16 +89,16 @@ for arg in "$@"; do
 done
 
 # check args
-if [ "$FILE" == "UNSET" ]; then
+if [ "$FILE" != "UNSET" ]; then
     echo "$FILE"
-    nohup java -jar -Dspring.config.location="$FILE" searcher.jar >searcherlog.log 2>&1 &
+    nohup java -jar searcher.jar --spring.config.location="$FILE" >searcherlog.log 2>&1 &
     exit 1
 fi
 if [ "$FILE_PATH" == "UNSET" ] || [ "$PATTERN" == "UNSET" ] || [ "$MODULE" == "UNSET" ] || [ "$UUID" == "UNSET" ] || [ "$ULA" == "UNSET" ]; then
   argsError
 fi
 
-if [ "$LEVEL" != "DEBUG" ] || [ "$LEVEL" != "INFO" ] || [ "$LEVEL" != "WARN" ] || [ "$LEVEL" != "ERROR" ]; then
+if [ "$LEVEL" != "DEBUG" ] && [ "$LEVEL" != "INFO" ] && [ "$LEVEL" != "WARN" ] && [ "$LEVEL" != "ERROR" ]; then
   argsError
 fi
 
