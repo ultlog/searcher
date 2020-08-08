@@ -1,9 +1,37 @@
-# ultlog searcher
-
-## Preface
+<h1 align="center">Searcher</h1>
+<p align="center">
+  <a target="_blank" href="https://github.com/ultlog/searcher/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue"></a>
+  <a target="_blank" href="https://github.com/ultlog/searcher/pulls"><img src=https://img.shields.io/badge/pr-welcome-green"></a>
+  <a target="_blank" href="https://github.com/ultlog/searcher/releases/"><img src="https://img.shields.io/github/v/release/ultlog/searcher"></a>
+  <a target="_blank" href="https://github.com/ultlog/searcher/pulls?q=is%3Apr+is%3Aclosed"><img src="https://img.shields.io/github/issues-pr-closed/ultlog/searcher"></a>
+</p>
+<p align="center">
 Searcher is a program that collects logs in the ultlog system. By monitoring the log files in the system, the generated logs are sent to ula in real time.
-Unlike [collector](https://github.com/ultlog/collector), Searcher does not need to be integrated in the project, but integrated in the operating system instead.
+Unlike <a href="https://github.com/ultlog/collector">collector</a>, Searcher does not need to be integrated in the project, but integrated in the operating system instead.
 Therefore, some non-logback-based java projects and even non-java projects can also send log to ultlog by modifying the format of the log, and enjoy the convenience brought by ultlog.
+</p>
+   
+<p align="center">
+  <a href="https://ultlog.com" target="_blank">
+    文档
+  </a>
+  / 
+  <a href="https://github.com/ultlog/ula/" target="_blank">
+    ultlog-api
+  </a>
+  / 
+  <a href="https://github.com/ultlog/ulu/" target="_blank">
+    ultlog-ui
+  </a>
+  / 
+  <a href="https://github.com/ultlog/collector" target="_blank">
+    collector
+  </a>
+  /
+  <a href="https://github.com/ultlog/searcher" target="_blank">
+    searcher
+  </a>
+</p>
 
 ## Need
 
